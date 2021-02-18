@@ -371,7 +371,7 @@ sudo docker run \
 
 ## Unit Testing
 ```
-for service in "account follow like post uniquepair"
+for service in account follow like post uniquepair
 do
   export PYTHONPATH=app/$service/service/tests/site-packages/
   python3 app/$service/service/tests/test_$service.py
