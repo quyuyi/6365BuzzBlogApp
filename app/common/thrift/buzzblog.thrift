@@ -483,3 +483,18 @@ service TUniquepairService {
    */
   i32 count_second_elem (1:string domain, 2:i32 second_elem);
 }
+
+////////////////////////////////////////////////////////////////////////////////
+// Recommendation service
+////////////////////////////////////////////////////////////////////////////////
+service TRecommendationService {
+  /* Params:
+   *   1. requester_id: id of the account making the request.
+   *   2. keyword: filter posts by keyword
+   *   3. search_size: limit the search space in the database
+   *   4. return_size: limit the return size of the search results
+   * Returns:
+   *   A list of posts (standard mode) containing the keyword.
+   */
+  list<TPost> retrieve_recommended_posts (1:i32 requester_id, 2:string keyword);
+}

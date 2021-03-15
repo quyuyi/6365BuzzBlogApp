@@ -4,7 +4,7 @@
 # Systems
 
 # Define constants.
-SERVICES="account follow like post uniquepair"
+SERVICES="account follow like post uniquepair recommendation"
 
 # Change to the parent directory.
 cd "$(dirname "$(dirname "$(readlink -fm "$0")")")"
