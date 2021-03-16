@@ -7,6 +7,7 @@ service TRecommendationService {
    *   2. keyword: filter posts by keyword
    *   3. search_size: limit the search space in the database
    *   4. return_size: limit the return size of the search results
+   *   5. before_date: limit the post created time before a certain date
    * Returns:
    *   A list of posts (standard mode) containing the keyword.
    */
