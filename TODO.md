@@ -4,9 +4,10 @@
 service TRecommendationService {
   /* Params:
    *   1. requester_id: id of the account making the request.
-   *   2. keyword: filter posts by keyword
+   *   2. keyword(s): filter posts by keyword(s)
    *   3. search_size: limit the search space in the database
    *   4. return_size: limit the return size of the search results
+   *   5. after_date: limit the post created time after a certain date
    * Returns:
    *   A list of posts (standard mode) containing the keyword.
    */
@@ -51,3 +52,51 @@ sudo systemctl start mongod
 mongo
 sudo systemctl stop mongod
 ```
+
+Data Modeling
+- Basically it is a collection of one document. 
+(A collection is the equivalent of an RDBMS table. A collection exists within a single database. 
+Collections do not enforce a schema. Documents within a collection can have different fields. 
+Typically, all documents in a collection have a similar or related purpose.)
+
+- The document is defined as:
+```
+{
+  "object": "post",
+  "mode": "expanded",(delete?)
+  "id": 123,
+  "created_at": 1601912233,
+  "active": true,(delete?)
+  "text": "Hello, world.",
+  "topics" : ["Sports", "Hobby"],
+  "author_id": 12345,
+  "author": {
+    "object": "account",
+    "mode": "standard",
+    "id": 12345,
+    "created_at": 1601912233,
+    "active": true,
+    "username": "john.doe",
+    "first_name": "John",
+    "last_name": "Doe"
+  },(delete?)
+  "n_likes": 0(delete?)
+}
+```
+
+Query
+- Example Query
+```
+use myNewDB
+db.myNewCollection1.insertMany( [post_info1, post_info2,...] )
+db.collection.find({ "topics": "Sports" }).limit(return_size)
+db.collection.find( { topics: { $all: [ "Sports", "Hobby" ] }, "created_at": {"$gt": after_date} } ).limit(return_size)
+```
+
+- Question
+    - How to query based on search_size?
+
+- Query Documents
+    - https://docs.mongodb.com/manual/reference/method/db.collection.find/#db.collection.find
+    - https://docs.mongodb.com/manual/tutorial/query-documents/#read-operations-query-argument
+    
