@@ -4,7 +4,23 @@
 #include <string>
 
 #include <cxxopts.hpp>
-// #include <pqxx/pqxx>
+
+#include <bsoncxx/json.hpp>
+#include <mongocxx/client.hpp>
+#include <mongocxx/stdx.hpp>
+#include <mongocxx/uri.hpp>
+#include <mongocxx/instance.hpp>
+#include <bsoncxx/builder/stream/helpers.hpp>
+#include <bsoncxx/builder/stream/document.hpp>
+#include <bsoncxx/builder/stream/array.hpp>
+
+using bsoncxx::builder::stream::close_array;
+using bsoncxx::builder::stream::close_document;
+using bsoncxx::builder::stream::document;
+using bsoncxx::builder::stream::finalize;
+using bsoncxx::builder::stream::open_array;
+using bsoncxx::builder::stream::open_document;
+
 #include <thrift/protocol/TBinaryProtocol.h>
 #include <thrift/server/TThreadedServer.h>
 #include <thrift/transport/TBufferTransports.h>
@@ -35,11 +51,30 @@ public:
 
   void retrieve_recommended_posts(std::vector<TPost> & _return, 
       const int32_t requester_id, const std::string& keyword) {
-    // Build query string.
+    // Connect to mongodb
+    mongocxx::instance instance{}; // This should be done only once.
+    mongocxx::client client{mongocxx::uri{}};
+    // mongocxx::uri uri("mongodb://localhost:27017");
+    // mongocxx::client client(uri);
+    mongocxx::database db = client["myDB"];
+    mongocxx::collection collection = db["myCollection1"];
 
-    // Execute query.
+    // create index for keywords
+    // https://docs.mongodb.com/manual/core/index-multikey/
+    auto index_value = document{} << "keywords" << 1 << finalize;
+    collection.create_index(index_value.view());
+
+    // query by one keyword
+    auto query_value = document{} << "keywords" << keyword << finalize;
+    mongocxx::cursor cursor = collection.find(query_value.view());
+    std::cout << "\nPrinting posts with keyword " << keyword << std::endl;
+    for (auto doc : cursor)
+    {
+        std::cout << bsoncxx::to_json(doc) << "\n";
+    }
 
     // Build result list.
+    
   }
   
 };
