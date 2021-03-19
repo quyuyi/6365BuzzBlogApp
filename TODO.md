@@ -21,9 +21,10 @@ service TRecommendationService {
 
 ### `app/recommendation/service/`
 - `app/recommendation/service/server/src/recommendation_server.cpp`
-    - Change pqxx to mongocxx
+    - <s>Change pqxx to mongocxx</s>
     - Implement TRecommendationServiceHandler generated and will be used by thrift
     - Change main function for server
+    - Add to base server for mongodb connection and recommendation configuration
 
 - `app/recommendation/service/client/src/recommendation_client.<cpp|py>`
     - Implement service client to be able to use the server functions
@@ -32,6 +33,9 @@ service TRecommendationService {
     - Test as a server client
     - Question: no implementation for cpp in current repo? Can implement our client in py? need to implement the `client/src/recommendation_client.cpp`?
 
+- `app/common/include/base_server.h`
+  - 
+
 ### `app/recommendation/database/`
 - Execution code for mongodb when initializing the server. I.e., create table, ...
 - Question: use mongodb for recommendation storage; use postgres for account/post/... storage. If we want to use account services, we still need the postgres db. \
@@ -39,7 +43,7 @@ Or do we change the existing services to migrate the storage to mongodb?
 
 ### `app/recommendation/service/server/Dockerfile`
 - <s>Define the image for the recommendation server</s>
-- Compile and execution code to start the server
+- <s>Compile and execution code to start the server</s> NOT TESTED
 
 ### `app/apigateway/serber/src/apigateway.py`
 - Add end point for recommendation service
@@ -99,4 +103,19 @@ db.collection.find( { topics: { $all: [ "Sports", "Hobby" ] }, "created_at": {"$
 - Query Documents
     - https://docs.mongodb.com/manual/reference/method/db.collection.find/#db.collection.find
     - https://docs.mongodb.com/manual/tutorial/query-documents/#read-operations-query-argument
-    
+  
+
+### Deployment and Test
+- No need to deploy 
+
+
+## Notes
+Run mongodb on docker; check docker should have a mongodb image
+
+## Dataset
+- Extract keywords:\
+Summerization, but need long context -> twitter post is too small.\
+Better to simplify\
+Create a dictionay of words ~100 words. Or count the most 100 popular words from the dataset.\
+The goal is to introduce variability.\
+
