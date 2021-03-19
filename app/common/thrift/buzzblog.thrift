@@ -75,6 +75,15 @@ struct TUniquepair {
   5: required i32 second_elem;
 }
 
+
+struct TRecPost {
+  1: required i32 post_id;
+  2: required string tweet_id;
+  3: required i32 created_at;
+  4: required string text;
+  5: required list<string> keywords;
+}
+
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
@@ -489,12 +498,12 @@ service TUniquepairService {
 ////////////////////////////////////////////////////////////////////////////////
 service TRecommendationService {
   /* Params:
-   *   1. requester_id: id of the account making the request.
-   *   2. keyword: filter posts by keyword
-   *   3. search_size: limit the search space in the database
-   *   4. return_size: limit the return size of the search results
+   *   1. keyword: filter posts by keyword
+   *   2. search_size: limit the search space in the database
+   *   3. return_size: limit the return size of the search results
+   *   4. created_after: if have time
    * Returns:
    *   A list of posts (standard mode) containing the keyword.
    */
-  list<TPost> retrieve_recommended_posts (1:i32 requester_id, 2:string keyword);
+  list<TRecPost> retrieve_recommended_posts (1:string keyword);
 }

@@ -49,8 +49,8 @@ public:
       postgres_dbname) {
   }
 
-  void retrieve_recommended_posts(std::vector<TPost> & _return, 
-      const int32_t requester_id, const std::string& keyword) {
+  void retrieve_recommended_posts(std::vector<TRecPost> & _return, 
+      const std::string& keyword) {
     // Connect to mongodb
     mongocxx::instance instance{}; // This should be done only once.
     mongocxx::client client{mongocxx::uri{}};
@@ -68,12 +68,18 @@ public:
     auto query_value = document{} << "keywords" << keyword << finalize;
     mongocxx::cursor cursor = collection.find(query_value.view());
     std::cout << "\nPrinting posts with keyword " << keyword << std::endl;
+
+    // Build result list.
     for (auto doc : cursor)
     {
         std::cout << bsoncxx::to_json(doc) << "\n";
+        TRecPost p;
+        p.post_id = doc["post_id"].get_int32();
+        p.tweet_id = doc["tweet_id"].get_utf8().value.to_string();
+        p.created_at = doc["created_at"].get_int32();
+        p.text = doc["text"].get_utf8().value.to_string();
+        _return.push_back(p);
     }
-
-    // Build result list.
     
   }
   

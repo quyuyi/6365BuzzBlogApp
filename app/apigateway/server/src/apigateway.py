@@ -23,6 +23,7 @@ class ThriftClientFactory:
       self._follow_servers = backend["follow"]["service"]
       self._like_servers = backend["like"]["service"]
       self._post_servers = backend["post"]["service"]
+      self._recommendation_servers = backend["recommendation"]["service"]
 
   def get_account_client(self):
     server = random.choice(self._account_servers)
@@ -40,6 +41,9 @@ class ThriftClientFactory:
     server = random.choice(self._post_servers)
     return PostClient(server.split(':')[0], int(server.split(':')[1]))
 
+  def get_recommendation_client(self):
+    server = random.choice(self._recommendation_servers)
+    return RecommendationClient(server.split(':')[0], int(server.split(':')[1]))
 
 def setup_app():
   app = flask.Flask(__name__)
@@ -530,3 +534,16 @@ def list_likes():
       "n_likes": like.post.n_likes
     }
   } for like in likes])
+
+
+
+@app.route("/recommendation/<string:keyword>", methods=["GET"])
+def retrieve_recommended_posts(keyword):
+  with thrift_client_factory.get_recommendation_client() as recommendation_client:
+    rec_posts = recommendation_client.retrieve_recommended_posts(keyword)
+  return flask.jsonify([{
+    "post_id": rec_post.post_id,
+    "tweet_id": rec_post.tweet_id,
+    "created_at": rec_post.create_at,
+    "text": rec_post.text
+  } for rec_post in rec_posts])

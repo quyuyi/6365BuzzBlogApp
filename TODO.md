@@ -1,3 +1,8 @@
+## TODO
+1. client.h/client.py
+2. base_account.h: add mongodb info
+3. add mongodb start script
+
 ### `app/common/thrift/buzzblog.thrift`
 - <s>Define service interface for recommendation</s>
 ```

@@ -2,9 +2,11 @@
 
 # install mongo c driver
 # ref: http://mongoc.org/libmongoc/current/installing.html
+cd /tmp
 wget https://github.com/mongodb/mongo-c-driver/releases/download/1.17.4/mongo-c-driver-1.17.4.tar.gz
 tar xzf mongo-c-driver-1.17.4.tar.gz
 sudo apt-get install cmake libssl-dev libsasl2-dev
+cd mongo-c-driver-1.17.4
 mkdir cmake-build
 cd cmake-build
 
@@ -13,9 +15,12 @@ cmake -DENABLE_AUTOMATIC_INIT_AND_CLEANUP=OFF -DCMAKE_BUILD_TYPE=Release -DBSONC
 cmake --build .
 sudo cmake --build . --target install
 
+rm -rf mongo-c-driver-1.17.4*
+
 
 # install mongo cxx driver
 # ref: http://mongocxx.org/mongocxx-v3/installation/linux/
+cd /tmp
 curl -OL https://github.com/mongodb/mongo-cxx-driver/releases/download/r3.6.2/mongo-cxx-driver-r3.6.2.tar.gz
 tar -xzf mongo-cxx-driver-r3.6.2.tar.gz
 cd mongo-cxx-driver-r3.6.2/build
@@ -28,3 +33,4 @@ cmake ..                                \
 cmake --build .
 sudo cmake --build . --target install
 
+rm -rf mongo-c-driver-1.17.4*

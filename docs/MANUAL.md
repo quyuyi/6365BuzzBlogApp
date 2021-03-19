@@ -369,6 +369,52 @@ sudo docker run \
     uniquepair:latest
 ```
 
+### Recommendation Service
+1. Create a Docker volume named pg_account.
+```
+sudo docker volume create mongo_recommendation
+```
+
+2. Run a Docker container based on the official Mongodb image. Here we name the container recommendation_database, publish its port 27017 to the host port 5436, set a user named postgres with password postgres and create a database postgres, enable the trust authentication mode, and limit the number of concurrent connections to 128.
+```
+sudo docker run \
+    --name recommendation_database \
+    --publish 5436:27017 \
+    --volume mg_rcmd:/var/lib/mongodb/data \
+    --detach \
+    mongo:4.0.23-xenial \
+```
+
+3. Create tables and indexes.
+```
+
+```
+
+4. Generate Thrift code and copy client libraries.
+```
+./utils/generate_and_copy_code.sh
+```
+
+5. Build the Docker image. Here we name the image post:latest.
+```
+cd app/recommendation/service/server
+sudo docker build -t recommendation:latest .
+```
+
+6. Run a Docker container based on the newly built image. Here we name this container recommendation_service, publish its port 9094 to the same host port, set the Thrift server to use 8 threads, and bind-mount the conf/backend.yml configuration file.
+```
+cd ../../../..
+sudo docker run \
+    --name recommendation_service \
+    --publish 9096:9096 \
+    --env port=9096 \
+    --env threads=8 \
+    --env backend_filepath=/etc/opt/BuzzBlogApp/backend.yml \
+    --volume $(pwd)/conf/backend.yml:/etc/opt/BuzzBlogApp/backend.yml \
+    --detach \
+    recommendation:latest
+```
+
 ## Unit Testing
 ```
 for service in account follow like post uniquepair

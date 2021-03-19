@@ -20,3 +20,7 @@ uniquepair:
   service:
     - "172.17.0.1:9095"
   database: "172.17.0.1:5435"
+recommendation:
+  service:
+    - "172.17.0.1:9096"
+  database: "172.17.0.1:5436"

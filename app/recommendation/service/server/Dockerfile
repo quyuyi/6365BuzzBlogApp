@@ -44,18 +44,22 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get install -y \
 
 # install mongo c driver
 # ref: http://mongoc.org/libmongoc/current/installing.html
-RUN wget https://github.com/mongodb/mongo-c-driver/releases/download/1.17.4/mongo-c-driver-1.17.4.tar.gz \
+RUN cd /tmp \
+  && wget https://github.com/mongodb/mongo-c-driver/releases/download/1.17.4/mongo-c-driver-1.17.4.tar.gz \
   && tar xzf mongo-c-driver-1.17.4.tar.gz \
   && apt-get install cmake libssl-dev libsasl2-dev \
+  && cd mongo-c-driver-1.17.4 \
   && mkdir cmake-build \
   && cd cmake-build \
   && cmake -DENABLE_AUTOMATIC_INIT_AND_CLEANUP=OFF -DCMAKE_BUILD_TYPE=Release .. \
   && cmake --build . \
-  && cmake --build . --target install
+  && cmake --build . --target install \
+  && rm -rf /tmp/*
 
 # install mongo cxx driver
 # ref: http://mongocxx.org/mongocxx-v3/installation/linux/
-RUN curl -OL https://github.com/mongodb/mongo-cxx-driver/releases/download/r3.6.2/mongo-cxx-driver-r3.6.2.tar.gz \
+RUN cd \tmp \
+  && curl -OL https://github.com/mongodb/mongo-cxx-driver/releases/download/r3.6.2/mongo-cxx-driver-r3.6.2.tar.gz \
   && tar -xzf mongo-cxx-driver-r3.6.2.tar.gz \
   && cd mongo-cxx-driver-r3.6.2/build \
   && cmake ..                             \
@@ -63,7 +67,8 @@ RUN curl -OL https://github.com/mongodb/mongo-cxx-driver/releases/download/r3.6.
       -DCMAKE_BUILD_TYPE=Release          \
       -DCMAKE_INSTALL_PREFIX=/usr/local   \
   && cmake --build . \
-  && cmake --build . --target install
+  && cmake --build . --target install \
+  && rm -rf /tmp/*
 
 # Install Thrift 0.13.
 RUN DEBIAN_FRONTEND=noninteractive apt-get install -y \
@@ -84,7 +89,8 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get install -y \
 RUN cd /tmp \
   && wget https://github.com/jarro2783/cxxopts/archive/v2.2.1.zip \
   && unzip v2.2.1.zip \
-  && cp cxxopts-2.2.1/include/cxxopts.hpp /usr/local/include
+  && cp cxxopts-2.2.1/include/cxxopts.hpp /usr/local/include \
+  && rm -rf /tmp/*
 
 # Copy service client libraries.
 COPY include include
