@@ -58,7 +58,7 @@ RUN cd /tmp \
 
 # install mongo cxx driver
 # ref: http://mongocxx.org/mongocxx-v3/installation/linux/
-RUN cd \tmp \
+RUN cd /tmp \
   && curl -OL https://github.com/mongodb/mongo-cxx-driver/releases/download/r3.6.2/mongo-cxx-driver-r3.6.2.tar.gz \
   && tar -xzf mongo-cxx-driver-r3.6.2.tar.gz \
   && cd mongo-cxx-driver-r3.6.2/build \
@@ -74,11 +74,6 @@ RUN cd \tmp \
 RUN DEBIAN_FRONTEND=noninteractive apt-get install -y \
   libthrift-0.13.0=0.13.0-2build2 \
   libthrift-dev=0.13.0-2build2
-
-# # Install libpqxx 6.4.5.
-# RUN DEBIAN_FRONTEND=noninteractive apt-get install -y \
-#   libpqxx-6.4=6.4.5-2build1 \
-#   libpqxx-dev=6.4.5-2build1
 
 # Install libyaml 0.6.2.
 RUN DEBIAN_FRONTEND=noninteractive apt-get install -y \
@@ -98,7 +93,6 @@ COPY include include
 # Copy source code.
 COPY src src
 
-# TODO: change compile: delete -lpqxx -lpq; add mongodb related compilation flag
 # Compile source code.
 RUN mkdir bin && g++ -o bin/recommendation_server src/recommendation_server.cpp \
     include/buzzblog/gen/buzzblog_types.cpp \
@@ -117,6 +111,5 @@ RUN mkdir bin && g++ -o bin/recommendation_server src/recommendation_server.cpp 
     -L/usr/local/lib -lmongocxx -lbsoncxx \
     -Wl,-rpath,/usr/local/lib 
 
-# TODO: change from postgres to mongodb
 # Start the server.
 CMD ["/bin/bash", "-c", "bin/recommendation_server --host 0.0.0.0 --threads $threads --port $port --backend_filepath $backend_filepath --postgres_user $postgres_user --postgres_password $postgres_password --postgres_dbname $postgres_dbname"]

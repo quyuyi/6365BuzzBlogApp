@@ -536,7 +536,6 @@ def list_likes():
   } for like in likes])
 
 
-
 @app.route("/recommendation/<string:keyword>", methods=["GET"])
 def retrieve_recommended_posts(keyword):
   with thrift_client_factory.get_recommendation_client() as recommendation_client:

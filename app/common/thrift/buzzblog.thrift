@@ -501,7 +501,6 @@ service TRecommendationService {
    *   1. keyword: filter posts by keyword
    *   2. search_size: limit the search space in the database
    *   3. return_size: limit the return size of the search results
-   *   4. created_after: if have time
    * Returns:
    *   A list of posts (standard mode) containing the keyword.
    */

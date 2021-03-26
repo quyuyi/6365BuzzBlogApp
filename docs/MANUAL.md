@@ -380,14 +380,14 @@ sudo docker volume create mongo_recommendation
 sudo docker run \
     --name recommendation_database \
     --publish 5436:27017 \
-    --volume mg_rcmd:/var/lib/mongodb/data \
+    --volume mongo_recommendation:/var/lib/mongodb/data \
     --detach \
-    mongo:4.0.23-xenial \
+    mongo:4.4.4-bionic \
 ```
 
 3. Create tables and indexes.
 ```
-
+mongo localhost:5436 ./app/recommendation/database/recommendation.js
 ```
 
 4. Generate Thrift code and copy client libraries.
@@ -401,7 +401,7 @@ cd app/recommendation/service/server
 sudo docker build -t recommendation:latest .
 ```
 
-6. Run a Docker container based on the newly built image. Here we name this container recommendation_service, publish its port 9094 to the same host port, set the Thrift server to use 8 threads, and bind-mount the conf/backend.yml configuration file.
+6. Run a Docker container based on the newly built image. Here we name this container recommendation_service, publish its port 9096 to the same host port, set the Thrift server to use 8 threads, and bind-mount the conf/backend.yml configuration file.
 ```
 cd ../../../..
 sudo docker run \

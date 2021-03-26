@@ -9,7 +9,7 @@ from requests.auth import HTTPBasicAuth
 
 
 SERVER_HOSTNAME = "localhost"
-SERVER_PORT = 8080
+SERVER_PORT = 8080 # url for load balancer
 URL = "{hostname}:{port}".format(hostname=SERVER_HOSTNAME, port=SERVER_PORT)
 
 
@@ -36,6 +36,13 @@ class TestService(unittest.TestCase):
 
   # TODO: Test the other API methods.
 
+  def test_retrieve_recommended_posts(self):
+    r = requests.post("http://{url}/recommendation/{keyword}".format(url=URL,keyword="hello"),
+        json={}
+    )
+    self.assertEqual(200, r.status_code)
+    response = r.json()
+    print(response)
 
 if __name__ == "__main__":
   unittest.main()

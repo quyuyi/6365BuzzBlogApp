@@ -53,11 +53,10 @@ public:
       const std::string& keyword) {
     // Connect to mongodb
     mongocxx::instance instance{}; // This should be done only once.
-    mongocxx::client client{mongocxx::uri{}};
-    // mongocxx::uri uri("mongodb://localhost:27017");
-    // mongocxx::client client(uri);
-    mongocxx::database db = client["myDB"];
-    mongocxx::collection collection = db["myCollection1"];
+    mongocxx::uri uri(recommendation_db_conn_url);
+    mongocxx::client client(uri);
+    mongocxx::database db = client["myDatabase"];
+    mongocxx::collection collection = db["recommendations"];
 
     // create index for keywords
     // https://docs.mongodb.com/manual/core/index-multikey/

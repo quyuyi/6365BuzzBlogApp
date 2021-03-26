@@ -1,62 +1,57 @@
 ## TODO
-1. client.h/client.py
-2. base_account.h: add mongodb info
-3. add mongodb start script
-
 ### `app/common/thrift/buzzblog.thrift`
 - <s>Define service interface for recommendation</s>
-```
+```thrift
+struct TRecPost {
+  1: required i32 post_id;
+  2: required string tweet_id;
+  3: required i32 created_at;
+  4: required string text;
+  5: required list<string> keywords;
+}
+
 service TRecommendationService {
   /* Params:
-   *   1. requester_id: id of the account making the request.
-   *   2. keyword(s): filter posts by keyword(s)
-   *   3. search_size: limit the search space in the database
-   *   4. return_size: limit the return size of the search results
-   *   5. after_date: limit the post created time after a certain date
+   *   1. keyword: filter posts by keyword
+   *   2. search_size: limit the search space in the database
+   *   3. return_size: limit the return size of the search results
    * Returns:
    *   A list of posts (standard mode) containing the keyword.
    */
-  list<TPost> retrieve_recommended_posts (1:i32 requester_id, 2:string keyword);
+  list<TRecPost> retrieve_recommended_posts (1:string keyword);
 }
 ```
-- Questions
-    - maybe we don't even need to the requester id
-    - return posts in standard mode ot expanded mode
-    - will add parameter 3 and 4 later, first implement the basic functionality
+
+- will add parameter 3 and 4 later, first implement the basic functionality
 
 ### `app/recommendation/service/`
 - `app/recommendation/service/server/src/recommendation_server.cpp`
     - <s>Change pqxx to mongocxx</s>
-    - Implement TRecommendationServiceHandler generated and will be used by thrift
-    - Change main function for server
-    - Add to base server for mongodb connection and recommendation configuration
+    - <s>Implement TRecommendationServiceHandler generated and will be used by thrift</s>
+    - <s>Add to base server for mongodb connection and recommendation configuration</s>
 
 - `app/recommendation/service/client/src/recommendation_client.<cpp|py>`
-    - Implement service client to be able to use the server functions
+    - <s>Implement service client to be able to use the server functions</s>
 
 - `app/recommendation/service/tests/test_recommendation.<cpp|py>`
-    - Test as a server client
-    - Question: no implementation for cpp in current repo? Can implement our client in py? need to implement the `client/src/recommendation_client.cpp`?
+    - <s>Test as a server client</s>
 
 - `app/common/include/base_server.h`
-  - 
 
 ### `app/recommendation/database/`
-- Execution code for mongodb when initializing the server. I.e., create table, ...
-- Question: use mongodb for recommendation storage; use postgres for account/post/... storage. If we want to use account services, we still need the postgres db. \
-Or do we change the existing services to migrate the storage to mongodb?
+- <s>Execution code for mongodb when initializing the server. I.e., create table, ...</s>
 
 ### `app/recommendation/service/server/Dockerfile`
 - <s>Define the image for the recommendation server</s>
 - <s>Compile and execution code to start the server</s> NOT TESTED
 
 ### `app/apigateway/serber/src/apigateway.py`
-- Add end point for recommendation service
+- <s>Add end point for recommendation service</s>
 
 
 ## Mongodb
 Start mongodb, open cli, stop mongodb.
-```
+```bash
 sudo systemctl start mongod
 mongo
 sudo systemctl stop mongod
@@ -72,24 +67,10 @@ Typically, all documents in a collection have a similar or related purpose.)
 ```
 {
   "object": "post",
-  "mode": "expanded",(delete?)
   "id": 123,
   "created_at": 1601912233,
-  "active": true,(delete?)
   "text": "Hello, world.",
   "topics" : ["Sports", "Hobby"],
-  "author_id": 12345,
-  "author": {
-    "object": "account",
-    "mode": "standard",
-    "id": 12345,
-    "created_at": 1601912233,
-    "active": true,
-    "username": "john.doe",
-    "first_name": "John",
-    "last_name": "Doe"
-  },(delete?)
-  "n_likes": 0(delete?)
 }
 ```
 

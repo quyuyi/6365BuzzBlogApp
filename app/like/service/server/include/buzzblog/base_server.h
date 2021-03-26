@@ -13,7 +13,7 @@
 #include <buzzblog/like_client.h>
 #include <buzzblog/post_client.h>
 #include <buzzblog/uniquepair_client.h>
-
+#include <buzzblog/recommendation_client.h>
 
 class BaseServer {
 protected:
@@ -35,6 +35,11 @@ protected:
     auto post_db = backend["post"]["database"].as<std::string>();
     auto uniquepair_service = backend["uniquepair"]["service"];
     auto uniquepair_db = backend["uniquepair"]["database"].as<std::string>();
+
+    auto recommendation_service = backend["recommendation"]["service"];
+    auto recommendation_db = backend["recommendation"]["database"].as<std::string>();
+
+
     // Load account service configuration.
     for (auto it = account_service.begin(); it != account_service.end(); it++) {
       auto server = it->as<std::string>();
@@ -81,6 +86,18 @@ protected:
       std::cout << "\tAdded uniquepair service on " << \
           hostname << ":" << port << std::endl;
     }
+
+    // Load recommendation service configuration.
+    for (auto it = recommendation_service.begin(); it != recommendation_service.end(); it++) {
+      auto server = it->as<std::string>();
+      auto hostname = server.substr(0, server.find(":"));
+      auto port = std::stoi(server.substr(server.find(":") + 1));
+      this->recommendation_service.push_back(std::make_pair(hostname, port));
+      std::cout << "\tAdded recommendation service on " << \
+          hostname << ":" << port << std::endl;
+    }
+
+
     // Build account database connection string.
     auto account_db_host = account_db.substr(0, account_db.find(":"));
     auto account_db_port = std::stoi(
@@ -110,6 +127,13 @@ protected:
     uniquepair_db_conn_str = std::string(conn_cstr);
     std::cout << "\tAdded uniquepair database on: " << \
         uniquepair_db_host << ":" << uniquepair_db_port << std::endl;
+
+    // Build recommendation database connection url
+    auto recommendation_db_host = recommendation_db.substr(0, recommendation_db.find(":"));
+    auto recommendation_db_port = std::stoi(recommendation_db.substr(recommendation_db.find(":") + 1));
+    const char *mongo_conn_fmt = "mongodb://%s:%d";
+    sprintf(conn_cstr, mongo_conn_fmt, recommendation_db_host.c_str(), recommendation_db_port);
+    recommendation_db_conn_url = conn_cstr;
   }
 
   std::unique_ptr<account_service::Client> get_account_client() {
@@ -152,14 +176,28 @@ protected:
         server.first, server.second, 10000));
   }
 
+  std::unique_ptr<recommendation_service::Client> get_recommendation_client() {
+    // Randomly select a server.
+    std::pair<std::string, int> server =
+        recommendation_service[rand() % int(recommendation_service.size())];
+    return std::move(std::make_unique<recommendation_service::Client>(
+        server.first, server.second, 10000));
+  }
+
   // Pairs of server hosts and ports.
   std::vector<std::pair<std::string, int>> account_service;
   std::vector<std::pair<std::string, int>> follow_service;
   std::vector<std::pair<std::string, int>> like_service;
   std::vector<std::pair<std::string, int>> post_service;
   std::vector<std::pair<std::string, int>> uniquepair_service;
+
+  std::vector<std::pair<std::string, int>> recommendation_service;
+
+
   // Database connection strings.
   std::string account_db_conn_str;
   std::string post_db_conn_str;
   std::string uniquepair_db_conn_str;
+
+  std::string recommendation_db_conn_url;
 };
