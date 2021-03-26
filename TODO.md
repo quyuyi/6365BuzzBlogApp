@@ -123,10 +123,6 @@ db.collection.find( { topics: { $all: [ "Sports", "Hobby" ] }, "created_at": {"$
 ### Deployment and Test
 - No need to deploy 
 
-
-## Notes
-Run mongodb on docker; check docker should have a mongodb image
-
 ## Dataset
 - Extract keywords:\
 Summerization, but need long context -> twitter post is too small.\
