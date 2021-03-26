@@ -2,7 +2,7 @@
 // how to run: mongo localhost:27017 ./app/recommendation/database/recommendation.js
 
 // connect to the database and collection
-conn = new Mongo();
+conn = new Mongo("localhost:5436");
 db = conn.getDB("myDatabase");
 collection = db.recommendations;
 

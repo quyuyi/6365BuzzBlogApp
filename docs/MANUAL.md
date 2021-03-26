@@ -370,19 +370,19 @@ sudo docker run \
 ```
 
 ### Recommendation Service
-1. Create a Docker volume named pg_account.
+1. Create a Docker volume named mongo_recommendation.
 ```
 sudo docker volume create mongo_recommendation
 ```
 
-2. Run a Docker container based on the official Mongodb image. Here we name the container recommendation_database, publish its port 27017 to the host port 5436, set a user named postgres with password postgres and create a database postgres, enable the trust authentication mode, and limit the number of concurrent connections to 128.
+2. Run a Docker container based on the official Mongodb image. Here we name the container recommendation_database, publish its port 27017 to the host port 5436, and limit the number of concurrent connections to 128.
 ```
 sudo docker run \
     --name recommendation_database \
     --publish 5436:27017 \
     --volume mongo_recommendation:/var/lib/mongodb/data \
     --detach \
-    mongo:4.4.4-bionic \
+    mongo:4.4.4-bionic
 ```
 
 3. Create tables and indexes.

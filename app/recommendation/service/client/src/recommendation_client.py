@@ -31,4 +31,4 @@ class Client:
       self._transport.close()
 
   def retrieve_recommended_posts(self, keyword):
-    return _tclient.retrieve_recommended_posts(keyword=keyword)
+    return self._tclient.retrieve_recommended_posts(keyword=keyword)

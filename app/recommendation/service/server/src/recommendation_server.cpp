@@ -47,12 +47,12 @@ public:
       const std::string& postgres_dbname)
   : BaseServer(backend_filepath, postgres_user, postgres_password,
       postgres_dbname) {
+        mongocxx::instance instance{}; // This should be done only once.
   }
 
   void retrieve_recommended_posts(std::vector<TRecPost> & _return, 
       const std::string& keyword) {
     // Connect to mongodb
-    mongocxx::instance instance{}; // This should be done only once.
     mongocxx::uri uri(recommendation_db_conn_url);
     mongocxx::client client(uri);
     mongocxx::database db = client["myDatabase"];
@@ -77,6 +77,7 @@ public:
         p.tweet_id = doc["tweet_id"].get_utf8().value.to_string();
         p.created_at = doc["created_at"].get_int32();
         p.text = doc["text"].get_utf8().value.to_string();
+        p.keywords = std::vector<std::string> {};
         _return.push_back(p);
     }
     
@@ -87,7 +88,7 @@ public:
 
 int main(int argc, char** argv) {
   // Define command-line parameters.
-  cxxopts::Options options("account_server", "Account server");
+  cxxopts::Options options("recommendation_server", "Recommendation server");
   options.add_options()
       ("host", "", cxxopts::value<std::string>()->default_value("0.0.0.0"))
       ("port", "", cxxopts::value<int>())
@@ -113,7 +114,7 @@ int main(int argc, char** argv) {
 
   // Create server.
   TThreadedServer server(
-      std::make_shared<TAccountServiceProcessor>(
+      std::make_shared<TRecommendationServiceProcessor>(
           std::make_shared<TRecommendationServiceHandler>(backend_filepath,
               postgres_user, postgres_password, postgres_dbname)),
       std::make_shared<TServerSocket>(host, port),
