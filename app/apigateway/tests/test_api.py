@@ -9,7 +9,7 @@ from requests.auth import HTTPBasicAuth
 
 
 SERVER_HOSTNAME = "localhost"
-SERVER_PORT = 8080 # url for load balancer
+SERVER_PORT = 8081 # url for api gateway
 URL = "{hostname}:{port}".format(hostname=SERVER_HOSTNAME, port=SERVER_PORT)
 
 

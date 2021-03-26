@@ -11,6 +11,7 @@ from buzzblog.account_client import Client as AccountClient
 from buzzblog.follow_client import Client as FollowClient
 from buzzblog.like_client import Client as LikeClient
 from buzzblog.post_client import Client as PostClient
+from buzzblog.recommendation_client import Client as RecommendationClient
 from buzzblog.gen.ttypes import *
 
 
@@ -543,6 +544,6 @@ def retrieve_recommended_posts(keyword):
   return flask.jsonify([{
     "post_id": rec_post.post_id,
     "tweet_id": rec_post.tweet_id,
-    "created_at": rec_post.create_at,
+    "created_at": rec_post.created_at,
     "text": rec_post.text
   } for rec_post in rec_posts])
