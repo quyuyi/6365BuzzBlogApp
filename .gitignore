@@ -2,3 +2,4 @@
 *.swp
 .vscode/
 app/recommendation/database/dataset.js
+app/recommendation/service/server/bin/
