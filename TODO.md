@@ -1,4 +1,6 @@
 ## TODO
+- mongodb store data to `/data/db` in default. so may need to change the docker run command for recommendation database to `--volume mongo_recommendation:/data/db`
+
 ### `app/common/thrift/buzzblog.thrift`
 - <s>Define service interface for recommendation</s>
 ```thrift
