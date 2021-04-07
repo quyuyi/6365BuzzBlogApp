@@ -16,6 +16,7 @@ collection.createIndex({keywords:1});
 
 // print query results: all documents in the collection
 // cursor = collection.find();
+// printjson( cursor.next() );
 // while ( cursor.hasNext() ) {
 //    printjson( cursor.next() );
 // }

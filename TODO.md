@@ -42,6 +42,15 @@ service TRecommendationService {
 
 ### `app/recommendation/database/`
 - <s>Execution code for mongodb when initializing the server. I.e., create table, ...</s>
+- upload dataset to google drive for download in experiments.
+```bash
+cd app/recommendation/database/
+tar -cvzf dataset.tar.gz dataset.js
+git clone https://github.com/circulosmeos/gdown.pl.git
+./gdown.pl/gdown.pl <google drive share link> ~/Downloads/dataset.tar.gz
+tar -xvzf ~/Downloads/dataset.tar.gz ~/Downloads/dataset.js
+```
+where, google drive share link for our dataset is: https://drive.google.com/file/d/1rHRaHJ3NOHtD0_XRuaI3zyYTfpsjxcpk/view?usp=sharing. Note, in order for gdown work, set the permission of google drive file to any one can view.
 
 ### `app/recommendation/service/server/Dockerfile`
 - <s>Define the image for the recommendation server</s>
