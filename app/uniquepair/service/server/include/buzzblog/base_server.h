@@ -133,7 +133,9 @@ protected:
     auto recommendation_db_port = std::stoi(recommendation_db.substr(recommendation_db.find(":") + 1));
     const char *mongo_conn_fmt = "mongodb://%s:%d";
     sprintf(conn_cstr, mongo_conn_fmt, recommendation_db_host.c_str(), recommendation_db_port);
-    recommendation_db_conn_url = conn_cstr;
+    recommendation_db_conn_url = std::string(conn_cstr);
+    std::cout << "\tAdded recommendation database on: " << \
+        recommendation_db_host << ":" << recommendation_db_port << std::endl;
   }
 
   std::unique_ptr<account_service::Client> get_account_client() {
