@@ -20,7 +20,7 @@ class TRecommendationServiceHandler : virtual public TRecommendationServiceIf {
     // Your initialization goes here
   }
 
-  void retrieve_recommended_posts(std::vector<TRecPost> & _return, const std::string& keyword) {
+  void retrieve_recommended_posts(std::vector<TRecPost> & _return, const std::string& keyword, const int32_t search_size, const int32_t return_size) {
     // Your implementation goes here
     printf("retrieve_recommended_posts\n");
   }

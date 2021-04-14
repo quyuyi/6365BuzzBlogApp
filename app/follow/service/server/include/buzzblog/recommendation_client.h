@@ -44,9 +44,9 @@ namespace recommendation_service {
         _transport->close();
     }
 
-    std::vector<TRecPost> retrieve_recommended_posts(const std::string& keyword) {
+    std::vector<TRecPost> retrieve_recommended_posts(const std::string& keyword, const int32_t search_size, const int32_t return_size) {
         std::vector<TRecPost> _return;
-        _client->retrieve_recommended_posts(_return, keyword);
+        _client->retrieve_recommended_posts(_return, keyword, search_size, return_size);
         return _return;
     }
   };

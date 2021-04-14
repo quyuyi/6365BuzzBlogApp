@@ -16,7 +16,10 @@ class TestService(unittest.TestCase):
   def test_retrieve_recommended_posts(self):
     with RecommendationClient(IP_ADDRESS, PORT) as client:
       # Retrieve posts with keyword "hello"
-      rec_posts = client.retrieve_recommended_posts("hello")
+      search_size = 10
+      return_size = 5
+      rec_posts = client.retrieve_recommended_posts("get", 10, 20)
+      print(len(rec_posts))
       for p in rec_posts:
         print(p)
 

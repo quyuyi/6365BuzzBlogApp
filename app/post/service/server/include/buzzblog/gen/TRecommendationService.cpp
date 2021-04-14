@@ -42,6 +42,22 @@ uint32_t TRecommendationService_retrieve_recommended_posts_args::read(::apache::
           xfer += iprot->skip(ftype);
         }
         break;
+      case 2:
+        if (ftype == ::apache::thrift::protocol::T_I32) {
+          xfer += iprot->readI32(this->search_size);
+          this->__isset.search_size = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
+      case 3:
+        if (ftype == ::apache::thrift::protocol::T_I32) {
+          xfer += iprot->readI32(this->return_size);
+          this->__isset.return_size = true;
+        } else {
+          xfer += iprot->skip(ftype);
+        }
+        break;
       default:
         xfer += iprot->skip(ftype);
         break;
@@ -63,6 +79,14 @@ uint32_t TRecommendationService_retrieve_recommended_posts_args::write(::apache:
   xfer += oprot->writeString(this->keyword);
   xfer += oprot->writeFieldEnd();
 
+  xfer += oprot->writeFieldBegin("search_size", ::apache::thrift::protocol::T_I32, 2);
+  xfer += oprot->writeI32(this->search_size);
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("return_size", ::apache::thrift::protocol::T_I32, 3);
+  xfer += oprot->writeI32(this->return_size);
+  xfer += oprot->writeFieldEnd();
+
   xfer += oprot->writeFieldStop();
   xfer += oprot->writeStructEnd();
   return xfer;
@@ -80,6 +104,14 @@ uint32_t TRecommendationService_retrieve_recommended_posts_pargs::write(::apache
 
   xfer += oprot->writeFieldBegin("keyword", ::apache::thrift::protocol::T_STRING, 1);
   xfer += oprot->writeString((*(this->keyword)));
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("search_size", ::apache::thrift::protocol::T_I32, 2);
+  xfer += oprot->writeI32((*(this->search_size)));
+  xfer += oprot->writeFieldEnd();
+
+  xfer += oprot->writeFieldBegin("return_size", ::apache::thrift::protocol::T_I32, 3);
+  xfer += oprot->writeI32((*(this->return_size)));
   xfer += oprot->writeFieldEnd();
 
   xfer += oprot->writeFieldStop();
@@ -227,19 +259,21 @@ uint32_t TRecommendationService_retrieve_recommended_posts_presult::read(::apach
   return xfer;
 }
 
-void TRecommendationServiceClient::retrieve_recommended_posts(std::vector<TRecPost> & _return, const std::string& keyword)
+void TRecommendationServiceClient::retrieve_recommended_posts(std::vector<TRecPost> & _return, const std::string& keyword, const int32_t search_size, const int32_t return_size)
 {
-  send_retrieve_recommended_posts(keyword);
+  send_retrieve_recommended_posts(keyword, search_size, return_size);
   recv_retrieve_recommended_posts(_return);
 }
 
-void TRecommendationServiceClient::send_retrieve_recommended_posts(const std::string& keyword)
+void TRecommendationServiceClient::send_retrieve_recommended_posts(const std::string& keyword, const int32_t search_size, const int32_t return_size)
 {
   int32_t cseqid = 0;
   oprot_->writeMessageBegin("retrieve_recommended_posts", ::apache::thrift::protocol::T_CALL, cseqid);
 
   TRecommendationService_retrieve_recommended_posts_pargs args;
   args.keyword = &keyword;
+  args.search_size = &search_size;
+  args.return_size = &return_size;
   args.write(oprot_);
 
   oprot_->writeMessageEnd();
@@ -327,7 +361,7 @@ void TRecommendationServiceProcessor::process_retrieve_recommended_posts(int32_t
 
   TRecommendationService_retrieve_recommended_posts_result result;
   try {
-    iface_->retrieve_recommended_posts(result.success, args.keyword);
+    iface_->retrieve_recommended_posts(result.success, args.keyword, args.search_size, args.return_size);
     result.__isset.success = true;
   } catch (const std::exception& e) {
     if (this->eventHandler_.get() != NULL) {
@@ -365,13 +399,13 @@ void TRecommendationServiceProcessor::process_retrieve_recommended_posts(int32_t
   return processor;
 }
 
-void TRecommendationServiceConcurrentClient::retrieve_recommended_posts(std::vector<TRecPost> & _return, const std::string& keyword)
+void TRecommendationServiceConcurrentClient::retrieve_recommended_posts(std::vector<TRecPost> & _return, const std::string& keyword, const int32_t search_size, const int32_t return_size)
 {
-  int32_t seqid = send_retrieve_recommended_posts(keyword);
+  int32_t seqid = send_retrieve_recommended_posts(keyword, search_size, return_size);
   recv_retrieve_recommended_posts(_return, seqid);
 }
 
-int32_t TRecommendationServiceConcurrentClient::send_retrieve_recommended_posts(const std::string& keyword)
+int32_t TRecommendationServiceConcurrentClient::send_retrieve_recommended_posts(const std::string& keyword, const int32_t search_size, const int32_t return_size)
 {
   int32_t cseqid = this->sync_->generateSeqId();
   ::apache::thrift::async::TConcurrentSendSentry sentry(this->sync_.get());
@@ -379,6 +413,8 @@ int32_t TRecommendationServiceConcurrentClient::send_retrieve_recommended_posts(
 
   TRecommendationService_retrieve_recommended_posts_pargs args;
   args.keyword = &keyword;
+  args.search_size = &search_size;
+  args.return_size = &return_size;
   args.write(oprot_);
 
   oprot_->writeMessageEnd();

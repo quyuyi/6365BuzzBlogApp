@@ -7,7 +7,7 @@
 struct TRecPost {
   1: required i32 post_id;
   2: required string tweet_id;
-  3: required i32 created_at;
+  3: required string created_at;
   4: required string text;
   5: required list<string> keywords;
 }
@@ -61,8 +61,8 @@ where, google drive share link for our dataset is: https://drive.google.com/file
 
 ### Compile and run
 ```
-APPDIR=$PWD
-cd app/recommendation/service/server/
+APPDIR=/home/quyuyi/Projects/6365BuzzBlogApp/
+cd $APPDIR/app/recommendation/service/server/
 mkdir bin
 g++ -o bin/recommendation_server src/recommendation_server.cpp \
     include/buzzblog/gen/buzzblog_types.cpp \

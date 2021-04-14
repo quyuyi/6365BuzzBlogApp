@@ -79,7 +79,7 @@ struct TUniquepair {
 struct TRecPost {
   1: required i32 post_id;
   2: required string tweet_id;
-  3: required i32 created_at;
+  3: required string created_at;
   4: required string text;
   5: required list<string> keywords;
 }
@@ -504,5 +504,5 @@ service TRecommendationService {
    * Returns:
    *   A list of posts (standard mode) containing the keyword.
    */
-  list<TRecPost> retrieve_recommended_posts (1:string keyword);
+  list<TRecPost> retrieve_recommended_posts (1:string keyword, 2:i32 search_size, 3:i32 return_size);
 }

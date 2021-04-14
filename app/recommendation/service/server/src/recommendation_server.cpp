@@ -51,7 +51,9 @@ public:
   }
 
   void retrieve_recommended_posts(std::vector<TRecPost> & _return, 
-      const std::string& keyword) {
+                                  const std::string& keyword, 
+                                  const int32_t search_size, 
+                                  const int32_t return_size) {
     // Connect to mongodb
     mongocxx::uri uri(recommendation_db_conn_url);
     mongocxx::client client(uri);
@@ -60,13 +62,15 @@ public:
 
     // create index for keywords
     // https://docs.mongodb.com/manual/core/index-multikey/
-    auto index_value = document{} << "keywords" << 1 << finalize;
-    collection.create_index(index_value.view());
+    // auto index_value = document{} << "keywords" << 1 << finalize;
+    // collection.create_index(index_value.view());
 
     // query by one keyword
     auto query_value = document{} << "keywords" << keyword << finalize;
-    mongocxx::cursor cursor = collection.find(query_value.view());
-    std::cout << "\nPrinting posts with keyword " << keyword << std::endl;
+    mongocxx::options::find opts;
+    opts.limit(return_size);
+    mongocxx::cursor cursor = collection.find(query_value.view(), opts);
+    std::cout << "Printing posts with keyword " << keyword << std::endl;
 
     // Build result list.
     for (auto doc : cursor)
@@ -75,9 +79,12 @@ public:
         TRecPost p;
         p.post_id = doc["post_id"].get_int32();
         p.tweet_id = doc["tweet_id"].get_utf8().value.to_string();
-        p.created_at = doc["created_at"].get_int32();
+        p.created_at = doc["created_at"].get_utf8().value.to_string();
         p.text = doc["text"].get_utf8().value.to_string();
-        p.keywords = std::vector<std::string> {};
+        bsoncxx::array::view keywords{doc["keywords"].get_array().value};
+        for (const bsoncxx::array::element& keyword : keywords) {
+            p.keywords.push_back(keyword.get_utf8().value.to_string());
+        }
         _return.push_back(p);
     }
     

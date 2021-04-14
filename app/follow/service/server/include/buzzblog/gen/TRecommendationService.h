@@ -22,7 +22,7 @@ namespace gen {
 class TRecommendationServiceIf {
  public:
   virtual ~TRecommendationServiceIf() {}
-  virtual void retrieve_recommended_posts(std::vector<TRecPost> & _return, const std::string& keyword) = 0;
+  virtual void retrieve_recommended_posts(std::vector<TRecPost> & _return, const std::string& keyword, const int32_t search_size, const int32_t return_size) = 0;
 };
 
 class TRecommendationServiceIfFactory {
@@ -52,14 +52,16 @@ class TRecommendationServiceIfSingletonFactory : virtual public TRecommendationS
 class TRecommendationServiceNull : virtual public TRecommendationServiceIf {
  public:
   virtual ~TRecommendationServiceNull() {}
-  void retrieve_recommended_posts(std::vector<TRecPost> & /* _return */, const std::string& /* keyword */) {
+  void retrieve_recommended_posts(std::vector<TRecPost> & /* _return */, const std::string& /* keyword */, const int32_t /* search_size */, const int32_t /* return_size */) {
     return;
   }
 };
 
 typedef struct _TRecommendationService_retrieve_recommended_posts_args__isset {
-  _TRecommendationService_retrieve_recommended_posts_args__isset() : keyword(false) {}
+  _TRecommendationService_retrieve_recommended_posts_args__isset() : keyword(false), search_size(false), return_size(false) {}
   bool keyword :1;
+  bool search_size :1;
+  bool return_size :1;
 } _TRecommendationService_retrieve_recommended_posts_args__isset;
 
 class TRecommendationService_retrieve_recommended_posts_args {
@@ -67,19 +69,29 @@ class TRecommendationService_retrieve_recommended_posts_args {
 
   TRecommendationService_retrieve_recommended_posts_args(const TRecommendationService_retrieve_recommended_posts_args&);
   TRecommendationService_retrieve_recommended_posts_args& operator=(const TRecommendationService_retrieve_recommended_posts_args&);
-  TRecommendationService_retrieve_recommended_posts_args() : keyword() {
+  TRecommendationService_retrieve_recommended_posts_args() : keyword(), search_size(0), return_size(0) {
   }
 
   virtual ~TRecommendationService_retrieve_recommended_posts_args() noexcept;
   std::string keyword;
+  int32_t search_size;
+  int32_t return_size;
 
   _TRecommendationService_retrieve_recommended_posts_args__isset __isset;
 
   void __set_keyword(const std::string& val);
 
+  void __set_search_size(const int32_t val);
+
+  void __set_return_size(const int32_t val);
+
   bool operator == (const TRecommendationService_retrieve_recommended_posts_args & rhs) const
   {
     if (!(keyword == rhs.keyword))
+      return false;
+    if (!(search_size == rhs.search_size))
+      return false;
+    if (!(return_size == rhs.return_size))
       return false;
     return true;
   }
@@ -101,6 +113,8 @@ class TRecommendationService_retrieve_recommended_posts_pargs {
 
   virtual ~TRecommendationService_retrieve_recommended_posts_pargs() noexcept;
   const std::string* keyword;
+  const int32_t* search_size;
+  const int32_t* return_size;
 
   uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
 
@@ -186,8 +200,8 @@ class TRecommendationServiceClient : virtual public TRecommendationServiceIf {
   std::shared_ptr< ::apache::thrift::protocol::TProtocol> getOutputProtocol() {
     return poprot_;
   }
-  void retrieve_recommended_posts(std::vector<TRecPost> & _return, const std::string& keyword);
-  void send_retrieve_recommended_posts(const std::string& keyword);
+  void retrieve_recommended_posts(std::vector<TRecPost> & _return, const std::string& keyword, const int32_t search_size, const int32_t return_size);
+  void send_retrieve_recommended_posts(const std::string& keyword, const int32_t search_size, const int32_t return_size);
   void recv_retrieve_recommended_posts(std::vector<TRecPost> & _return);
  protected:
   std::shared_ptr< ::apache::thrift::protocol::TProtocol> piprot_;
@@ -237,13 +251,13 @@ class TRecommendationServiceMultiface : virtual public TRecommendationServiceIf 
     ifaces_.push_back(iface);
   }
  public:
-  void retrieve_recommended_posts(std::vector<TRecPost> & _return, const std::string& keyword) {
+  void retrieve_recommended_posts(std::vector<TRecPost> & _return, const std::string& keyword, const int32_t search_size, const int32_t return_size) {
     size_t sz = ifaces_.size();
     size_t i = 0;
     for (; i < (sz - 1); ++i) {
-      ifaces_[i]->retrieve_recommended_posts(_return, keyword);
+      ifaces_[i]->retrieve_recommended_posts(_return, keyword, search_size, return_size);
     }
-    ifaces_[i]->retrieve_recommended_posts(_return, keyword);
+    ifaces_[i]->retrieve_recommended_posts(_return, keyword, search_size, return_size);
     return;
   }
 
@@ -279,8 +293,8 @@ class TRecommendationServiceConcurrentClient : virtual public TRecommendationSer
   std::shared_ptr< ::apache::thrift::protocol::TProtocol> getOutputProtocol() {
     return poprot_;
   }
-  void retrieve_recommended_posts(std::vector<TRecPost> & _return, const std::string& keyword);
-  int32_t send_retrieve_recommended_posts(const std::string& keyword);
+  void retrieve_recommended_posts(std::vector<TRecPost> & _return, const std::string& keyword, const int32_t search_size, const int32_t return_size);
+  int32_t send_retrieve_recommended_posts(const std::string& keyword, const int32_t search_size, const int32_t return_size);
   void recv_retrieve_recommended_posts(std::vector<TRecPost> & _return, const int32_t seqid);
  protected:
   std::shared_ptr< ::apache::thrift::protocol::TProtocol> piprot_;

@@ -1198,7 +1198,7 @@ void TRecPost::__set_tweet_id(const std::string& val) {
   this->tweet_id = val;
 }
 
-void TRecPost::__set_created_at(const int32_t val) {
+void TRecPost::__set_created_at(const std::string& val) {
   this->created_at = val;
 }
 
@@ -1259,8 +1259,8 @@ uint32_t TRecPost::read(::apache::thrift::protocol::TProtocol* iprot) {
         }
         break;
       case 3:
-        if (ftype == ::apache::thrift::protocol::T_I32) {
-          xfer += iprot->readI32(this->created_at);
+        if (ftype == ::apache::thrift::protocol::T_STRING) {
+          xfer += iprot->readString(this->created_at);
           isset_created_at = true;
         } else {
           xfer += iprot->skip(ftype);
@@ -1329,8 +1329,8 @@ uint32_t TRecPost::write(::apache::thrift::protocol::TProtocol* oprot) const {
   xfer += oprot->writeString(this->tweet_id);
   xfer += oprot->writeFieldEnd();
 
-  xfer += oprot->writeFieldBegin("created_at", ::apache::thrift::protocol::T_I32, 3);
-  xfer += oprot->writeI32(this->created_at);
+  xfer += oprot->writeFieldBegin("created_at", ::apache::thrift::protocol::T_STRING, 3);
+  xfer += oprot->writeString(this->created_at);
   xfer += oprot->writeFieldEnd();
 
   xfer += oprot->writeFieldBegin("text", ::apache::thrift::protocol::T_STRING, 4);

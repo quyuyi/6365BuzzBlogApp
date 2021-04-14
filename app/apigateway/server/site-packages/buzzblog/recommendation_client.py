@@ -30,5 +30,5 @@ class Client:
     if self._transport.isOpen():
       self._transport.close()
 
-  def retrieve_recommended_posts(self, keyword):
-    return self._tclient.retrieve_recommended_posts(keyword=keyword)
+  def retrieve_recommended_posts(self, keyword, search_size, return_size):
+    return self._tclient.retrieve_recommended_posts(keyword=keyword, search_size=search_size, return_size=return_size)

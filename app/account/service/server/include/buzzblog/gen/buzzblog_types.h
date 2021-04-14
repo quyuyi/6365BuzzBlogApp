@@ -453,13 +453,13 @@ class TRecPost : public virtual ::apache::thrift::TBase {
 
   TRecPost(const TRecPost&);
   TRecPost& operator=(const TRecPost&);
-  TRecPost() : post_id(0), tweet_id(), created_at(0), text() {
+  TRecPost() : post_id(0), tweet_id(), created_at(), text() {
   }
 
   virtual ~TRecPost() noexcept;
   int32_t post_id;
   std::string tweet_id;
-  int32_t created_at;
+  std::string created_at;
   std::string text;
   std::vector<std::string>  keywords;
 
@@ -467,7 +467,7 @@ class TRecPost : public virtual ::apache::thrift::TBase {
 
   void __set_tweet_id(const std::string& val);
 
-  void __set_created_at(const int32_t val);
+  void __set_created_at(const std::string& val);
 
   void __set_text(const std::string& val);
 
