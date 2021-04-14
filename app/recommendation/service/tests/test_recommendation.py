@@ -8,7 +8,7 @@ from buzzblog.gen.ttypes import *
 from buzzblog.recommendation_client import Client as RecommendationClient
 
 
-IP_ADDRESS = "localhost"
+IP_ADDRESS = "0.0.0.0"
 PORT = 9096
 
 

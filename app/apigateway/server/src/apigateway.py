@@ -539,8 +539,9 @@ def list_likes():
 
 @app.route("/recommendation/<string:keyword>", methods=["GET"])
 def retrieve_recommended_posts(keyword):
+  params = flask.request.get_json()
   with thrift_client_factory.get_recommendation_client() as recommendation_client:
-    rec_posts = recommendation_client.retrieve_recommended_posts(keyword)
+    rec_posts = recommendation_client.retrieve_recommended_posts(keyword, params["search_size"], params["return_size"])
   return flask.jsonify([{
     "post_id": rec_post.post_id,
     "tweet_id": rec_post.tweet_id,

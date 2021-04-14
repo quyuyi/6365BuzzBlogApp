@@ -9,7 +9,7 @@ from requests.auth import HTTPBasicAuth
 
 
 SERVER_HOSTNAME = "localhost"
-SERVER_PORT = 8081 # url for api gateway
+SERVER_PORT = 8080 # url for api gateway
 URL = "{hostname}:{port}".format(hostname=SERVER_HOSTNAME, port=SERVER_PORT)
 
 
@@ -37,8 +37,11 @@ class TestService(unittest.TestCase):
   # TODO: Test the other API methods.
 
   def test_retrieve_recommended_posts(self):
-    r = requests.get("http://{url}/recommendation/{keyword}".format(url=URL,keyword="hello"),
-        json={}
+    r = requests.get("http://{url}/recommendation/{keyword}".format(url=URL,keyword="good"),
+        json={
+          "search_size": 10,
+          "return_size": 10
+        }
     )
     self.assertEqual(200, r.status_code)
     response = r.json()
