@@ -23,4 +23,4 @@ uniquepair:
 recommendation:
   service:
     - "172.17.0.1:9096"
-  database: "0.0.0.0:5436"
+  database: "172.17.0.1:5436"
