@@ -38,7 +38,7 @@ class TestService(unittest.TestCase):
 
   def test_retrieve_recommended_posts(self):
     r = requests.get("http://{url}/recommendation/{keyword}".format(url=URL,keyword="good"),
-        json={
+        params={
           "search_size": 10,
           "return_size": 10
         }
